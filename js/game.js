@@ -51,11 +51,12 @@
     var jsonLoader = new THREE.JSONLoader();
     jsonLoader.load("res/models/android.js", function(geometry, materials) {
       player = {};
+      player.rotOffset = Math.PI / 2;
       player.model = addModel(geometry, materials);
       fixDef.shape = new b2CircleShape();
       fixDef.shape.SetRadius(2.5);
       bodyDef.type = b2Body.b2_dynamicBody; // balls can move
-      bodyDef.userData = player.model;
+      bodyDef.userData = player;
       bodyDef.position.x = 50 + physicsOffset;
       bodyDef.position.y = 0 + physicsOffset;
       player.body = world.CreateBody(bodyDef);
@@ -68,15 +69,17 @@
     });
 
     jsonLoader.load("res/models/interior.js", function(geometry, materials) {
-      var inside = addModel(geometry, materials);
-      inside.position.y = 1;
+      var go = {};
+      go.model = addModel(geometry, materials);
+      go.model.position.y = 1;
       fixDef.shape = new b2PolygonShape();
-      fixDef.shape.SetAsBox(43, 34); // "25" = half width of the ramp, "1" = half height
+      fixDef.shape.SetAsBox(33, 43); // "25" = half width of the ramp, "1" = half height
       bodyDef.type = b2Body.b2_staticBody; // Objects defined in this function are all static
-      bodyDef.userData = inside;
+      bodyDef.userData = go;
       bodyDef.position.x = 50 + physicsOffset;
       bodyDef.position.y = 50 + physicsOffset;
-      world.CreateBody(bodyDef).CreateFixture(fixDef); // Add this physics body to the world
+      go.body = world.CreateBody(bodyDef);
+      go.body.CreateFixture(fixDef); // Add this physics body to the world
     });
 
     document.body.appendChild(renderer.domElement);
@@ -183,15 +186,15 @@
     world.Step(1 / 60, 10, 10);
 
     var object = world.GetBodyList(),
-      mesh, position;
+      go, position;
     while (object) {
-      mesh = object.GetUserData();
+      go = object.GetUserData();
 
-      if (mesh) {
+      if (go) {
         position = object.GetPosition();
-        mesh.position.x = position.x;
-        mesh.position.z = position.y;
-        mesh.rotation.y = Math.PI * 2 - object.GetAngle() + Math.PI / 2;
+        go.model.position.x = position.x;
+        go.model.position.z = position.y;
+        go.model.rotation.y = 2 * Math.PI - object.GetAngle() + (go.rotOffset ? go.rotOffset : 0);
       }
       object = object.GetNext(); // Get the next object in the scene
     }
