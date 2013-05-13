@@ -31,11 +31,13 @@
       fern.scale.set(100, 100, 100);
     });
 
-    jsonLoader.load("res/models/test.js", function(geometry, materials) {
-        var inside = addModel(geometry, materials);
-        inside.position.y = 10;
-        //inside.scale.set(50, 50, 50);
+    jsonLoader.load("res/models/interior.js", function(geometry, materials) {
+      var inside = addModel(geometry, materials);
+      inside.position.y = 10;
+      inside.scale.set(10, 10, 10);
     });
+
+
 
     document.body.appendChild(renderer.domElement);
   }
@@ -70,6 +72,9 @@
     if (player) {
       updatePlayer();
       updateCamera();
+    }
+    if (input.isKeyTriggered(VK_P)) {
+      saveScene();
     }
   }
 
@@ -122,8 +127,22 @@
     }
   }
 
+  function saveScene() {
+    var exporter = new THREE.ObjectExporter();
+    var output = JSON.stringify(exporter.parse(scene), null, '\t');
+    output = output.replace(/[\n\t]+([\d\.e\-\[\]]+)/g, '$1');
+    var blob = new Blob([output], {
+      type: 'text/plain'
+    });
+    var objectURL = URL.createObjectURL(blob);
+    window.open(objectURL, '_blank');
+    window.focus();
+  }
+
   function draw() {
-    renderer.render(scene, camera);
+    if (scene && camera) {
+      renderer.render(scene, camera);
+    }
   }
 
   function addCube() {
