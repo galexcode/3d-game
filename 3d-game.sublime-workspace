@@ -1,0 +1,868 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"tex",
+				"text-align"
+			],
+			[
+				"ab",
+				"absolute"
+			],
+			[
+				"read",
+				"ready	$(document).ready"
+			],
+			[
+				"jquery",
+				"jquery	jquery"
+			],
+			[
+				"j",
+				"js"
+			],
+			[
+				"ajax",
+				"ajax	Google AJAX Libraries: jQuery"
+			],
+			[
+				"sc",
+				"script	Tag"
+			],
+			[
+				"style",
+				"STYLE"
+			],
+			[
+				"canvas",
+				"canvas  (variable)"
+			],
+			[
+				"fz",
+				"fz	font-size"
+			],
+			[
+				"trans",
+				"transition	CSS - transition: ;"
+			],
+			[
+				"ba",
+				"background"
+			],
+			[
+				"ti",
+				"title	<title>"
+			],
+			[
+				"te",
+				"test1"
+			],
+			[
+				"jU",
+				"jQuery.get	jQuery.get"
+			],
+			[
+				"for",
+				"for	for (…) {…}"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "Packages/Python/Python.sublime-build",
+	"command_palette":
+	{
+		"height": 85.0,
+		"selected_items":
+		[
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"remove ",
+				"Package Control: Remove Package"
+			],
+			[
+				"fetch ",
+				"Fetch: Manage"
+			],
+			[
+				"gst o",
+				"Gist: Open Gist"
+			],
+			[
+				"gist",
+				"Gist: Create Private Gist"
+			],
+			[
+				"auto for",
+				"Tag: Auto-Format Tags on Document"
+			],
+			[
+				"gistin",
+				"Gist: Insert Gist"
+			],
+			[
+				"html",
+				"Snippet: HTML - Dummy text"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"packae remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"javascr",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"fetch",
+				"Fetch: File"
+			],
+			[
+				"markdow",
+				"Markdown Preview: preview in Browser"
+			],
+			[
+				"list pa",
+				"Package Control: List Packages"
+			],
+			[
+				"key bid",
+				"Preferences: Key Bindings - Default"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"packa",
+				"Package Control: Remove Package"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"lor",
+				"Snippet: Lorem ipsum"
+			],
+			[
+				"copy ",
+				"File: Copy as Tag style"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"settings",
+				"Preferences: Settings - User"
+			],
+			[
+				"2p",
+				"Preferences: 2pdf Settings – Default"
+			],
+			[
+				"viewi",
+				"View In Browser"
+			],
+			[
+				"viw ",
+				"View In Browser"
+			],
+			[
+				"list",
+				"Package Control: List Packages"
+			],
+			[
+				"packageco",
+				"Package Control: List Packages"
+			],
+			[
+				"package remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"browser",
+				"View In Browser"
+			],
+			[
+				"rename",
+				"File: Rename"
+			],
+			[
+				"fetchm",
+				"Fetch: Manage"
+			],
+			[
+				"add ",
+				"Project: Add Folder"
+			],
+			[
+				"copy s",
+				"File: Copy as Tag style"
+			],
+			[
+				"copy path pr",
+				"File: Copy Path From Project"
+			],
+			[
+				"doc",
+				"DocBlockr: Reparse comment block"
+			],
+			[
+				"gist in",
+				"Gist: Insert Gist"
+			],
+			[
+				"gist o",
+				"Gist: Open Gist"
+			],
+			[
+				"gisto",
+				"Gist: Open Gist"
+			],
+			[
+				"Package Control: rem",
+				"Package Control: Remove Package"
+			],
+			[
+				"csslin",
+				"CSSLint: Run CSSLint"
+			],
+			[
+				"gitc",
+				"Git: Commit history"
+			],
+			[
+				"title",
+				"Convert Case: Title Case"
+			],
+			[
+				"fetch f",
+				"Fetch: File"
+			],
+			[
+				"fethc",
+				"Fetch: Package"
+			],
+			[
+				"install ",
+				"Package Control: Install Package"
+			],
+			[
+				"snipdoc",
+				"Snippet: DOCTYPE HTML"
+			],
+			[
+				"snipp 	",
+				"Snippet: html"
+			],
+			[
+				"syncss",
+				"Set Syntax: CSS"
+			],
+			[
+				"css",
+				"Snippet: CSS - :active"
+			],
+			[
+				"Package Control",
+				"Preferences: Package Control Settings – Default"
+			],
+			[
+				"package",
+				"Preferences: Package Control Settings – User"
+			],
+			[
+				"javasc",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"previ",
+				"Markdown Preview: preview in Browser"
+			],
+			[
+				"install pa",
+				"Package Control: Install Package"
+			],
+			[
+				"instal p",
+				"Package Control: Install Package"
+			],
+			[
+				"mini",
+				"Minify Javascript"
+			],
+			[
+				"hask",
+				"SublimeHaskell: Go to next error"
+			],
+			[
+				"ha",
+				"Haskell Buddy: Reformat code"
+			],
+			[
+				"mark",
+				"Markdown Preview: preview in Browser"
+			],
+			[
+				"mar",
+				"Markdown Preview: preview in Browser"
+			],
+			[
+				"Snippet: ",
+				"Snippet: Lorem ipsum"
+			],
+			[
+				"lint",
+				"SublimeLinter: Show Error List"
+			],
+			[
+				"lint erro",
+				"SublimeLinter: Show Error List"
+			],
+			[
+				"markdo",
+				"Markdown Preview: preview in Browser"
+			],
+			[
+				"markdown",
+				"Markdown Preview: preview in Browser"
+			],
+			[
+				"show er",
+				"SublimeLinter: Show Error List"
+			],
+			[
+				"we",
+				"Web Inspector"
+			],
+			[
+				"web",
+				"Web Inspector"
+			],
+			[
+				"folder",
+				"Folders List"
+			],
+			[
+				"install p",
+				"Package Control: Install Package"
+			],
+			[
+				"list p",
+				"Package Control: List Packages"
+			],
+			[
+				"package control",
+				"Package Control: List Packages"
+			],
+			[
+				"pack",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"packai ns	",
+				"Package Control: Install Package"
+			],
+			[
+				"open",
+				"View: Toggle Open Files in Side Bar"
+			],
+			[
+				"build",
+				"Build: Build"
+			],
+			[
+				"set syntax: htm	",
+				"Set Syntax: HTML"
+			],
+			[
+				"swi",
+				"Set Syntax: Web Inspector (Stack)"
+			],
+			[
+				"web	",
+				"Web Inspector"
+			],
+			[
+				"web ",
+				"Web Inspector"
+			],
+			[
+				"web in",
+				"Web Inspector"
+			]
+		],
+		"width": 522.0
+	},
+	"console":
+	{
+		"height": 322.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/JavaScript Snippets/ctx.sublime-snippet",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/Tag/Tag Package.sublime-settings",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/SublimeCodeIntel/Base File.sublime-settings",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/User/jquery.sublime-snippet",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/User/Fetch.sublime-settings",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/HTMLBeautify/HTMLBeautify.sublime-settings",
+		"/C/Users/Sean/Downloads/USB Loader GX 4.3 Updated Version/USB Loader GX/Step By Step.txt",
+		"/C/Users/Sean/AppData/Local/Temp/7zO26C.tmp/README.txt",
+		"/C/Users/Sean/AppData/Local/Temp/7zOCE61.tmp/LICENSE.txt",
+		"/C/Users/Sean/AppData/Local/Temp/7zO5645.tmp/USAGE.txt",
+		"/C/Users/Sean/AppData/Local/Temp/7zO596.tmp/README-BootMii.txt",
+		"/G/README.txt",
+		"/G/APACHE-2.0.txt",
+		"/G/README-BootMii.txt",
+		"/D/Sean/Notes/fafsa.txt",
+		"/C/Users/Sean/Desktop/bot/bot.py",
+		"/D/Sean/Notes/New Text Document.txt",
+		"/G/CREDITS.txt",
+		"/C/Users/Sean/Desktop/bot.py",
+		"/C/Users/Sean/Desktop/bot/words.txt",
+		"/C/Users/Sean/Documents/GitHub/jquery-color/jquery.color.js",
+		"/C/Users/Sean/Documents/GitHub/jquery-color/mytest.html",
+		"/C/Users/Sean/Desktop/phantomjs/README.md",
+		"/C/Users/Sean/Documents/GitHub/jquery-color/grunt.js",
+		"/C/Users/Sean/Documents/GitHub/jquery-color/test/qunit/qunit/qunit.js",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/User/Minifier.sublime-settings",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/JsMinifier/Minifier.sublime-settings",
+		"/C/Users/Sean/AppData/Roaming/npm/node_modules/grunt/README.md",
+		"/C/Users/Sean/Documents/GitHub/AsteroidsIO/server.js",
+		"/C/Users/Sean/Desktop/test.js",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/Default/Default (Windows).sublime-keymap",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/Gist/Default (Windows).sublime-keymap",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/Git/Git.sublime-settings",
+		"/C/Users/Sean/Documents/GitHub/AsteroidsIO - Copy/client.js",
+		"/C/Users/Sean/Documents/GitHub/AsteroidsIO - Copy/server.js",
+		"/C/Users/Sean/Documents/GitHub/AsteroidsIO/client.js",
+		"/C/Users/Sean/Documents/GitHub/AsteroidsIO/styles.css",
+		"/C/Users/Sean/Documents/GitHub/AsteroidsIO/index.html",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/JsFormat/Default (Windows).sublime-keymap",
+		"/C/Users/Sean/Documents/GitHub/AsteroidsIO/game.js",
+		"/C/Users/Sean/Documents/GitHub/AsteroidsIO/chat.js",
+		"/C/Users/Sean/Documents/GitHub/AsteroidsIO/todo.txt",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/User/node.sublime-build",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/User/Tag Package.sublime-settings",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/BracketHighlighter/bh_core.sublime-settings",
+		"/C/Users/Sean/Documents/GitHub/SocketIOTest/server.js",
+		"/C/Users/Sean/Documents/GitHub/AsteroidsIO/.gitignore",
+		"/C/Users/Sean/Documents/GitHub/AsteroidsIO/asteroids-io.sublime-project",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/LiveReload/LiveReload.sublime-settings",
+		"/C/xampp/htdocs/websockets/server.js",
+		"/C/Users/Sean/Documents/GitHub/SocketIOTest/client.js",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/User/LiveReload.sublime-settings",
+		"/C/Users/Sean/Documents/GitHub/SocketIOTest/websockets.sublime-project",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/User/View In Browser.sublime-settings",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/View In Browser/View In Browser.sublime-settings",
+		"/C/Users/Sean/Desktop/websockets/websockets.sublime-project",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Settings/SideBarEnhancements.json",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/2pdf/2pdf.sublime-settings",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/2pdf/Default (Windows).sublime-keymap",
+		"/C/Users/Sean/Desktop/Websockets/server.js",
+		"/C/Users/Sean/Documents/GitHub/devkit/projects/whack-that-mole/resources/splash/metadata.json",
+		"/C/Users/Sean/Documents/GitHub/devkit/projects/whack-that-mole/resources/icons/metadata.json",
+		"/C/Users/Sean/Documents/GitHub/devkit/projects/asteroids/manifest.json",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/Web Inspector/swi.sublime-settings",
+		"/C/Users/Sean/AppData/Local/Temp/7zOF5A9.tmp/readme.txt",
+		"/C/Program Files/Microsoft Xbox 360 Accessories/Readme.txt",
+		"/C/xampp/htdocs/socket.io.js",
+		"/C/Users/Sean/Desktop/Websockets/socket.io.js",
+		"/C/Users/Sean/Desktop/Websockets/socket.io",
+		"/C/Users/Sean/Desktop/Websockets/websockets.sublime-project",
+		"/C/Users/Sean/Desktop/platform-tls-win32.h",
+		"/C/Users/Sean/Documents/DigiPen/Perspective/WorkingDir/debug.log",
+		"/C/Users/Sean/Documents/DigiPen/Perspective/WorkingDir/Out.txt",
+		"/C/Users/Sean/Desktop/New Text Document.txt",
+		"/C/Users/Sean/Documents/GitHub/TLRanks/tlranks.min.js",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/User/Default (Windows).sublime-keymap",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/User/Gist.sublime-settings",
+		"/C/Users/Sean/Desktop/test/css/styles.css",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/SideBarEnhancements/messages/11.13.2012.1305.0.txt",
+		"/C/Users/Sean/Desktop/test/test.html",
+		"/C/Users/Sean/Desktop/test/test.js",
+		"/C/Users/Sean/Desktop/derp",
+		"/C/Users/Sean/Desktop/test/derp.html",
+		"/C/Users/Sean/Desktop/test/css/style.css",
+		"/C/Users/Sean/Desktop/test/d/d.html",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/User/Package Control.sublime-settings",
+		"/C/Users/Sean/Documents/GitHub/TLNewHype/newhype.js",
+		"/C/Users/Sean/Desktop/test.html",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/Package Control/Package Control.sublime-settings",
+		"/C/Users/Sean/Documents/GitHub/TLRanks/manifest.json",
+		"/D/DigiPen/Sophomore/CS250/sean.reilly_CS250_6/README.txt",
+		"/D/DigiPen/Sophomore/CS260/CS_260_Assignment_3/README.txt",
+		"/D/DigiPen/Sophomore/CS260/CS_260_Assignment_3/Release/config.txt",
+		"/C/Users/Sean/Documents/GitHub/HypeBot/README.md",
+		"/C/Users/Sean/Desktop/todo.txt",
+		"/C/Users/Sean/Documents/GitHub/TLRanks/tlranks.js",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/SublimeLinter/Default (Windows).sublime-keymap",
+		"/D/Sean/Games/CastleDoctrine_v5/stdout.txt",
+		"/D/DigiPen/Junior/CS380/AI.txt",
+		"/D/Sean/Games/CastleDoctrine_v5/gameElements/houseObjects/vault_goal/info.txt",
+		"/C/Users/Sean/Documents/GitHub/TLNewHype/newhype.min.js",
+		"/C/Users/Sean/Documents/GitHub/TLNewHype/store/description.txt",
+		"/C/Users/Sean/Documents/GitHub/TLNewHype/README.md",
+		"/C/Users/Sean/Documents/GitHub/TLNewHype/store/description",
+		"/C/Users/Sean/Documents/GitHub/TLRanks/README.md",
+		"/C/Users/Sean/Documents/GitHub/TLRanks/store/description.txt",
+		"/C/Users/Sean/Documents/GitHub/TLRanks/package.js",
+		"/C/Users/Sean/Desktop/data.txt",
+		"/C/Program Files (x86)/Haskell Platform/2012.4.0.0/bin/script.hs",
+		"/D/Sean/Games/CastleDoctrine_v5/gameElements/houseObjects/power_relay/info.txt",
+		"/D/Sean/Games/CastleDoctrine_v5/gameElements/houseObjects/power_relay_inverted/info.txt",
+		"/C/Users/Sean/Documents/GitHub/TLNewHype/jquery.js",
+		"/D/Sean/Games/CastleDoctrine_v5/gameElements/houseObjects/floor_electric/info.txt",
+		"/C/Users/Sean/Documents/GitHub/TLNewHype/README.markdown",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/SublimeClang/SublimeClang.sublime-settings",
+		"/C/Users/Sean/Desktop/phpinfo.php",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/Web Inspector/Default (Windows).sublime-keymap",
+		"/C/Users/Sean/Desktop/index.html",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/SublimeWebInspector/swi.sublime-settings",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/User/swi.sublime-settings",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
+		"/C/Program Files (x86)/Haskell Platform/2012.4.0.0/bin/script.exe",
+		"/C/Users/Sean/Desktop/projeuler.hs"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"div",
+			"\n	",
+			"stepHooks",
+			"cssHooks",
+			"an",
+			"anim",
+			"animate",
+			"test",
+			"http://",
+			"console",
+			"console.log",
+			"invulnerable",
+			"damage",
+			"damege",
+			"console.log",
+			"console.lgo",
+			"invulnerable",
+			"respawn",
+			"add",
+			"respawn",
+			"'resp",
+			"respawn",
+			"bombId",
+			"addship",
+			"displayColor",
+			"respawn",
+			"addShip",
+			"updateship",
+			"displaycolor",
+			"setcolor",
+			"setColor",
+			"respawn",
+			"new game.ship",
+			"updateship",
+			"addship",
+			"ship",
+			"color",
+			"ctrl+alt+e",
+			"addship",
+			"updatebomb",
+			"span",
+			"message",
+			"\"",
+			"damageShip",
+			"respawnShip",
+			"ship",
+			"drawBullets",
+			"drawBullet",
+			"drawbullets",
+			"console.log",
+			"ship",
+			"updateShip",
+			"angle",
+			"g",
+			"pos",
+			"drawShip",
+			"bomb",
+			"bullet",
+			"updateShips",
+			"update",
+			"updateShip",
+			"drawBomb",
+			"bomb",
+			"bullet",
+			"<<",
+			"bullettimeout",
+			"timeout",
+			"console.log",
+			"updateinput",
+			"shoot",
+			"204",
+			"dt",
+			"updateInput",
+			"updatinput",
+			"updateLoop",
+			"requestan",
+			"interval",
+			"updateloop",
+			"lastframe",
+			"updateShip",
+			"update",
+			"movedown",
+			"addvec",
+			"v0",
+			"result",
+			"mulvec",
+			"ship.accel",
+			"accelSpeed",
+			"maxSpeed",
+			"accel =",
+			"moveUp",
+			"accel",
+			"updateship",
+			"ship.accel",
+			"updateShip",
+			"ship.velo",
+			"updateship",
+			"mulVec",
+			"keyup",
+			"updateInput",
+			"addship",
+			"moveLeft",
+			"angle",
+			"* dt",
+			"* st",
+			"velocity * dt",
+			"updatebullets",
+			"addSh",
+			"moveUp",
+			"updateInput",
+			"updateinput",
+			"updateInput",
+			"moveUp",
+			"console.log",
+			"moveup",
+			"mulVec",
+			"addBUl",
+			"shoot",
+			"updateInput",
+			"moveup",
+			"updateinput",
+			"canFireBomb",
+			"updateInput",
+			"canFire",
+			"localShip",
+			"updateinput",
+			"updateInput",
+			"update"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"'",
+			"dt",
+			"'",
+			"localShip",
+			"ship",
+			"/",
+			"\\\\n",
+			"\\n",
+			"a",
+			"\\n",
+			""
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 38.0
+	},
+	"input":
+	{
+		"height": 38.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.clang":
+	{
+		"height": 144.0
+	},
+	"output.csslint_result_view":
+	{
+		"height": 142.0
+	},
+	"output.exec":
+	{
+		"height": 390.0
+	},
+	"replace":
+	{
+		"height": 62.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"server",
+				"server.js"
+			],
+			[
+				"css",
+				"styles.css"
+			],
+			[
+				"tlranks",
+				"tlranks.js"
+			],
+			[
+				"test.htm",
+				"test.html"
+			],
+			[
+				"style",
+				"css/style.css"
+			],
+			[
+				"testj",
+				"test.js"
+			],
+			[
+				"s",
+				"css/styles.css"
+			],
+			[
+				"html",
+				"/C/Users/Sean/Desktop/test.html"
+			],
+			[
+				"new",
+				"newhype.js"
+			],
+			[
+				"in",
+				"/C/Users/Sean/Desktop/index.html"
+			],
+			[
+				"",
+				"/C/Users/Sean/Desktop/test.js"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+			[
+				"socke",
+				"/C/xampp/htdocs/websockets/socket-io-test.sublime-project"
+			],
+			[
+				"webs",
+				"/C/Users/Sean/Desktop/Websockets/websockets.sublime-project"
+			],
+			[
+				"test",
+				"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/User/test.sublime-project"
+			],
+			[
+				"",
+				"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/Default/github.sublime-project"
+			],
+			[
+				"git",
+				"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/Default/github.sublime-project"
+			],
+			[
+				"tlrank",
+				"/C/Users/Sean/AppData/Roaming/Sublime Text 2/Packages/User/tlranks.sublime-project"
+			]
+		],
+		"width": 662.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 146.0,
+	"status_bar_visible": true
+}

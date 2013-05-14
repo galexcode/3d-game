@@ -1,10 +1,12 @@
-  // Graphics Definitions
+  // Game Definitions
 
-  var mesh, scene, camera, renderer;
+  var scene, camera, renderer;
   var player;
   var input = new InputManager();
   var cameraOffset = new THREE.Vector3(0, 40, 25);
-
+  var gameObjects = [];
+  var testSerialization;
+  var modelData = [];
   // Physics Definitions
 
   var b2Vec2 = Box2D.Common.Math.b2Vec2;
@@ -16,10 +18,8 @@
   var b2MassData = Box2D.Collision.Shapes.b2MassData;
   var b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape;
   var b2CircleShape = Box2D.Collision.Shapes.b2CircleShape;
+  var b2Shape = Box2D.Collision.Shapes.b2Shape;
   var b2DebugDraw = Box2D.Dynamics.b2DebugDraw;
-
-  var bodyDef = new b2BodyDef();
-  var fixDef = new b2FixtureDef();
 
   var world = new b2World(
   new b2Vec2(0, 0), // Gravity
@@ -43,25 +43,36 @@
     initCamera();
     onWindowResize();
     scene = new THREE.Scene();
-    mesh = addSphere();
-    mesh.position.x = 100;
     addFloor();
-    addLight();
+    addLight(new THREE.Vector3(10, 50, 130), new THREE.Color('#ffffff'));
 
     var jsonLoader = new THREE.JSONLoader();
     jsonLoader.load("res/models/android.js", function(geometry, materials) {
-      player = {};
-      player.rotOffset = Math.PI / 2;
-      player.model = addModel(geometry, materials);
-      fixDef.shape = new b2CircleShape();
-      fixDef.shape.SetRadius(2.5);
-      bodyDef.type = b2Body.b2_dynamicBody; // balls can move
-      bodyDef.userData = player;
-      bodyDef.position.x = 50 + physicsOffset;
-      bodyDef.position.y = 0 + physicsOffset;
-      player.body = world.CreateBody(bodyDef);
-      player.body.CreateFixture(fixDef); // Add this physics body to the world
-      player.body.SetFixedRotation(true);
+      go = {};
+      go.rotOffset = Math.PI / 2;
+      go.modelName = "android";
+      modelData[go.modelName] = {
+        geometry: geometry,
+        materials: materials
+      };
+      go.model = addModel(geometry, materials);
+
+      go.bodyDef = new b2BodyDef();
+      go.fixDef = new b2FixtureDef();
+      go.fixDef.shape = new b2CircleShape();
+      go.fixDef.shape.SetRadius(2.5);
+      go.bodyDef.type = b2Body.b2_dynamicBody; // balls can move
+      go.bodyDef.userData = go;
+      go.bodyDef.position.x = 50 + physicsOffset;
+      go.bodyDef.position.y = 0 + physicsOffset;
+      go.body = world.CreateBody(go.bodyDef);
+      go.body.CreateFixture(go.fixDef); // Add this physics body to the world
+      go.body.SetFixedRotation(true);
+
+      go.isPlayer = true;
+      player = go;
+
+      gameObjects.push(go);
     });
 
     jsonLoader.load("res/models/fern/fern.js", function(geometry, materials) {
@@ -70,16 +81,24 @@
 
     jsonLoader.load("res/models/interior.js", function(geometry, materials) {
       var go = {};
+      go.modelName = "interior";
+      modelData[go.modelName] = {
+        geometry: geometry,
+        materials: materials
+      };
       go.model = addModel(geometry, materials);
       go.model.position.y = 1;
-      fixDef.shape = new b2PolygonShape();
-      fixDef.shape.SetAsBox(33, 43); // "25" = half width of the ramp, "1" = half height
-      bodyDef.type = b2Body.b2_staticBody; // Objects defined in this function are all static
-      bodyDef.userData = go;
-      bodyDef.position.x = 50 + physicsOffset;
-      bodyDef.position.y = 50 + physicsOffset;
-      go.body = world.CreateBody(bodyDef);
-      go.body.CreateFixture(fixDef); // Add this physics body to the world
+      go.bodyDef = new b2BodyDef();
+      go.fixDef = new b2FixtureDef();
+      go.fixDef.shape = new b2PolygonShape();
+      go.fixDef.shape.SetAsBox(33, 43); // "25" = half width of the ramp, "1" = half height
+      go.bodyDef.type = b2Body.b2_staticBody; // Objects defined in this function are all static
+      go.bodyDef.userData = go;
+      go.bodyDef.position.x = 50 + physicsOffset;
+      go.bodyDef.position.y = 50 + physicsOffset;
+      go.body = world.CreateBody(go.bodyDef);
+      go.body.CreateFixture(go.fixDef); // Add this physics body to the world
+      gameObjects.push(go);
     });
 
     document.body.appendChild(renderer.domElement);
@@ -118,16 +137,19 @@
   }
 
   function update() {
-    if (mesh) {
-      mesh.rotation.x += 0.01;
-      mesh.rotation.y += 0.02;
+    if (input.isKeyTriggered(VK_P)) {
+      saveScene();
     }
+    if (input.isKeyTriggered(VK_I)) {
+      if (testSerialization) deserializeScene(testSerialization);
+    }
+    if (input.isKeyTriggered(VK_O)) {
+      testSerialization = serializeScene();
+    }
+
     if (player) {
       updatePlayer();
       updateCamera();
-    }
-    if (input.isKeyTriggered(VK_P)) {
-      saveScene();
     }
     updatePhysics();
   }
@@ -203,15 +225,78 @@
   }
 
   function saveScene() {
-    var exporter = new THREE.ObjectExporter();
-    var output = JSON.stringify(exporter.parse(scene), null, '\t');
-    output = output.replace(/[\n\t]+([\d\.e\-\[\]]+)/g, '$1');
-    var blob = new Blob([output], {
-      type: 'text/plain'
+    var data = serializeScene();
+    var blob = new Blob([data], {
+      type: 'text/json'
     });
     var objectURL = URL.createObjectURL(blob);
     window.open(objectURL, '_blank');
     window.focus();
+  }
+
+  function serializeScene() {
+    var output = {};
+    output.lights = [];
+    output.gameObjects = [];
+    var i;
+    for (i = 0; i < scene.__lights.length; i++) {
+      var light = scene.__lights[i];
+      output.lights[i] = {
+        position: light.position,
+        color: light.color
+      };
+    }
+    var go;
+    var filter;
+    for (i = 0; i < gameObjects.length; i++) {
+      go = gameObjects[i];
+      go.bodyDef.userData = undefined;
+      go.bodyDef.position = go.body.GetPosition();
+      filter = go.fixDef.filter;
+      delete go.fixDef.filter;
+      output.gameObjects[i] = {
+        bodyDef: go.bodyDef,
+        fixDef: go.fixDef,
+        modelName: go.modelName,
+        isPlayer: go.isPlayer,
+        rotOffset: go.rotOffset
+      };
+    }
+    var data = JSON.stringify(output, null, '\t');
+    for (i = 0; i < gameObjects.length; i++) {
+      go = gameObjects[i];
+      go.bodyDef.userData = go;
+      go.fixDef.filter = filter;
+    }
+    return data;
+  }
+
+  function deserializeScene(data) {
+    scene = new THREE.Scene();
+    clearWorld();
+    gameObjects = [];
+    var input = JSON.parse(data);
+    var i;
+    for (i = 0; i < input.lights.length; i++) {
+      addLight(input.lights[i].position, input.lights[i].color);
+    }
+    for (i = 0; i < input.gameObjects.length; i++) {
+      var go = input.gameObjects[i];
+      var fixDef = new b2FixtureDef();
+      fixDef.shape = go.fixDef.shape.m_type === 0 ? new b2CircleShape() : new b2PolygonShape();
+      go.bodyDef = mergeObjects(new b2BodyDef(), go.bodyDef);
+      go.bodyDef.userData = go;
+      go.fixDef = mergeObjects(fixDef, go.fixDef);
+      go.body = world.CreateBody(go.bodyDef);
+      go.body.CreateFixture(go.fixDef);
+      if (go.modelName) {
+        var md = modelData[go.modelName];
+        go.model = addModel(md.geometry, md.materials);
+      }
+      if (go.isPlayer) player = go;
+      gameObjects.push(go);
+    }
+    addFloor();
   }
 
   function draw() {
@@ -232,39 +317,12 @@
     return mesh;
   }
 
-  function addSphere() {
-    // set up the sphere vars
-    var radius = 5,
-      segments = 16,
-      rings = 16;
-
-    // create the sphere's material
-    var sphereMaterial = new THREE.MeshLambertMaterial({
-      color: 0xff0000
-    });
-
-    var sphere = new THREE.Mesh(
-
-    new THREE.SphereGeometry(
-    radius,
-    segments,
-    rings),
-
-    sphereMaterial);
-
-    // add the sphere to the scene
-    scene.add(sphere);
-    return sphere;
-  }
-
-  function addLight() {
+  function addLight(position, color) {
     // create a point light
-    var pointLight = new THREE.PointLight(0xffffff);
+    var pointLight = new THREE.PointLight(color);
 
     // set its position
-    pointLight.position.x = 10;
-    pointLight.position.y = 50;
-    pointLight.position.z = 130;
+    pointLight.position = position;
 
     // add to the scene
     scene.add(pointLight);
@@ -292,4 +350,24 @@
     var model = new THREE.Mesh(geometry, material);
     scene.add(model);
     return model;
+  }
+
+  function mergeObjects(obj1, obj2) {
+    if (obj1 === undefined || obj1 === null) return obj2;
+    for (var k in obj2) {
+      if (typeof(obj2[k]) == 'object') {
+        obj1[k] = mergeObjects(obj1[k], obj2[k]);
+      } else {
+        obj1[k] = obj2[k];
+      }
+    }
+    return obj1;
+  }
+
+  function clearWorld() {
+    var body = world.GetBodyList();
+    while (body) {
+      world.DestroyBody(body);
+      body = body.GetNext();
+    }
   }
