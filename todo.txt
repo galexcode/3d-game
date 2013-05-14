@@ -1,4 +1,8 @@
-Saving/loading levels
-Collision
 Level editing
+  - Property editor
+  - Object selection/placement
+  - Save/load buttons
 Pushing objects
+  - grabbing animation
+  - push/pull incrementally
+  - rotate 90 degrees

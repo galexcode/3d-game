@@ -7,7 +7,8 @@
   var gameObjects = [];
   var testSerialization;
   var modelData = [];
-  
+  var prototypes = {};
+
   // Physics Definitions
 
   var b2Vec2 = Box2D.Common.Math.b2Vec2;
@@ -39,20 +40,34 @@
     initCamera();
     onWindowResize();
 
-    scene = new THREE.Scene();
-    addFloor();
-    addLight(new THREE.Vector3(10, 50, 130), new THREE.Color('#ffffff'));
-    loadGameObject("android");
-    loadGameObject("interior");
+    // scene = new THREE.Scene();
+    // addFloor();
+    // addLight(new THREE.Vector3(10, 50, 130), new THREE.Color('#ffffff'));
+    // loadGameObject("android");
+    // loadGameObject("interior");    
+    loadScene("testScene");
 
     document.body.appendChild(renderer.domElement);
   }
 
-  function loadGameObject(name) {
-    var path = "res/objects/" + name + ".js";
-    new $.getJSON(path, function(input) {
-      fixDeserializedGameObject(input);
-    });
+  function loadGameObject(name, derived) {
+    if (prototypes[name]) {
+      createFromProto(prototypes[name], derived);
+    } else {
+      new $.getJSON("res/objects/" + name + ".js", function(proto) {
+        prototypes[name] = proto;
+        createFromProto(proto, derived);
+      });
+    }
+
+    function createFromProto(proto, derived) {
+      var go = copyObject(proto);
+      if (derived) {
+        go = mergeObjects(go, derived);
+      }
+      fixDeserializedGameObject(go);
+      go.parent = name;
+    }
   }
 
   function loadModel(modelName, callback) {
@@ -172,7 +187,7 @@
       camera.locked = !camera.locked;
       console.log("Camera locked: " + camera.locked);
     }
-    if (camera.locked) {
+    if (camera.locked && player && player.model) {
       camera.position.addVectors(cameraOffset, player.model.position);
       camera.lookAt(player.model.position);
     } else {
@@ -194,7 +209,7 @@
     while (object) {
       go = object.GetUserData();
 
-      if (go) {
+      if (go && go.model) {
         position = object.GetPosition();
         go.model.position.x = position.x;
         go.model.position.z = position.y;
@@ -213,7 +228,7 @@
   function serializeScene() {
     var output = {};
     output.lights = [];
-    output.gameObjects = [];
+    output.prototypes = [];
     var i;
     for (i = 0; i < scene.__lights.length; i++) {
       var light = scene.__lights[i];
@@ -222,13 +237,16 @@
         color: light.color
       };
     }
-    if (gameObjects[0]) filter = gameObjects[0].fixDef.filter;
     for (i = 0; i < gameObjects.length; i++) {
-      output.gameObjects[i] = serializePrepGameObject(gameObjects[i]);
+      var go = gameObjects[i];
+      var p = go.parent;
+      go = serializePrepGameObject(go);
+      var proto = serializePrepGameObject(prototypes[p]);
+      output.prototypes[i] = compareJSON(proto, go);
     }
     var data = JSON.stringify(output, null, '\t');
     for (i = 0; i < gameObjects.length; i++) {
-      serializeFixGameObject(gameObjects[i], filter);
+      serializeFixGameObject(gameObjects[i]);
     }
     return data;
   }
@@ -255,8 +273,9 @@
 
   function serializePrepGameObject(go) {
     go.bodyDef.userData = undefined;
-    go.bodyDef.position = go.body.GetPosition();
+    if (go.body) go.bodyDef.position = go.body.GetPosition();
     return {
+      parent: go.parent,
       bodyDef: go.bodyDef,
       fixDef: go.fixDef,
       modelName: go.modelName,
@@ -273,15 +292,20 @@
     scene = new THREE.Scene();
     clearWorld();
     gameObjects = [];
-    var input = JSON.parse(data);
+    var input = typeof(data) == 'object' ? data : JSON.parse(data);
     var i;
     for (i = 0; i < input.lights.length; i++) {
       addLight(input.lights[i].position, input.lights[i].color);
     }
-    for (i = 0; i < input.gameObjects.length; i++) {
-      var go = fixDeserializedGameObject(input.gameObjects[i]);
+    for (i = 0; i < input.prototypes.length; i++) {
+      var proto = input.prototypes[i];
+      var go = loadGameObject(proto.parent, proto);
     }
     addFloor();
+  }
+
+  function loadScene(name) {
+    $.getJSON("res/scenes/" + name + ".js", deserializeScene);
   }
 
   function fixDeserializedGameObject(go) {
@@ -378,4 +402,29 @@
       world.DestroyBody(body);
       body = body.GetNext();
     }
+  }
+
+  function compareJSON(obj1, obj2) {
+    if (obj1 === undefined) return obj2;
+    var ret = {};
+    for (var i in obj2) {
+      if (obj2.hasOwnProperty(i)) {
+        if (typeof(obj2[i]) == 'object') {
+          ret[i] = compareJSON(obj1[i], obj2[i]);
+        } else if (!obj1.hasOwnProperty(i) || obj2[i] !== obj1[i]) {
+          ret[i] = obj2[i];
+        }
+        if (ret[i] === undefined) {
+          delete ret[i];
+        }
+      }
+    }
+    if ($.isEmptyObject(ret)) {
+      return undefined;
+    }
+    return ret;
+  }
+
+  function copyObject(obj) {
+    return jQuery.extend(true, {}, obj);
   }
