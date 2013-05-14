@@ -137,6 +137,15 @@
   }
 
   function update() {
+    updateInput();
+    if (player) {
+      updatePlayer();
+      updateCamera();
+    }
+    updatePhysics();
+  }
+
+  function updateInput() {
     if (input.isKeyTriggered(VK_P)) {
       saveScene();
     }
@@ -146,12 +155,15 @@
     if (input.isKeyTriggered(VK_O)) {
       testSerialization = serializeScene();
     }
-
-    if (player) {
-      updatePlayer();
-      updateCamera();
+    if (input.isKeyTriggered(VK_8)) {
+      player = deserializeGameObject(testSerialization);
     }
-    updatePhysics();
+    if (input.isKeyTriggered(VK_9)) {
+      testSerialization = serializeGameObject(player);
+    }
+    if (input.isKeyTriggered(VK_0)) {
+      testSerialization = saveGameObject(player);
+    }
   }
 
   function updatePlayer() {
@@ -218,20 +230,14 @@
         go.model.position.z = position.y;
         go.model.rotation.y = 2 * Math.PI - object.GetAngle() + (go.rotOffset ? go.rotOffset : 0);
       }
-      object = object.GetNext(); // Get the next object in the scene
+      object = object.GetNext();
     }
     world.DrawDebugData();
     world.ClearForces();
   }
 
   function saveScene() {
-    var data = serializeScene();
-    var blob = new Blob([data], {
-      type: 'text/json'
-    });
-    var objectURL = URL.createObjectURL(blob);
-    window.open(objectURL, '_blank');
-    window.focus();
+    saveData(serializeScene());
   }
 
   function serializeScene() {
@@ -246,29 +252,51 @@
         color: light.color
       };
     }
-    var go;
-    var filter;
+    if (gameObjects[0]) filter = gameObjects[0].fixDef.filter;
     for (i = 0; i < gameObjects.length; i++) {
-      go = gameObjects[i];
-      go.bodyDef.userData = undefined;
-      go.bodyDef.position = go.body.GetPosition();
-      filter = go.fixDef.filter;
-      delete go.fixDef.filter;
-      output.gameObjects[i] = {
-        bodyDef: go.bodyDef,
-        fixDef: go.fixDef,
-        modelName: go.modelName,
-        isPlayer: go.isPlayer,
-        rotOffset: go.rotOffset
-      };
+      output.gameObjects[i] = serializePrepGameObject(gameObjects[i]);
     }
     var data = JSON.stringify(output, null, '\t');
     for (i = 0; i < gameObjects.length; i++) {
-      go = gameObjects[i];
-      go.bodyDef.userData = go;
-      go.fixDef.filter = filter;
+      serializeFixGameObject(gameObjects[i], filter);
     }
     return data;
+  }
+
+  function serializeGameObject(go) {
+    var output = serializePrepGameObject(go);
+    var data = JSON.stringify(output);
+    serializeFixGameObject(go);
+    return data;
+  }
+
+  function saveGameObject(go) {
+    saveData(serializeGameObject(go));
+  }
+
+  function saveData(data) {
+    var blob = new Blob([data], {
+      type: 'text/json'
+    });
+    var objectURL = URL.createObjectURL(blob);
+    window.open(objectURL, '_blank');
+    window.focus();
+  }
+
+  function serializePrepGameObject(go) {
+    go.bodyDef.userData = undefined;
+    go.bodyDef.position = go.body.GetPosition();
+    return {
+      bodyDef: go.bodyDef,
+      fixDef: go.fixDef,
+      modelName: go.modelName,
+      isPlayer: go.isPlayer,
+      rotOffset: go.rotOffset
+    };
+  }
+
+  function serializeFixGameObject(go) {
+    go.bodyDef.userData = go;
   }
 
   function deserializeScene(data) {
@@ -281,22 +309,32 @@
       addLight(input.lights[i].position, input.lights[i].color);
     }
     for (i = 0; i < input.gameObjects.length; i++) {
-      var go = input.gameObjects[i];
-      var fixDef = new b2FixtureDef();
-      fixDef.shape = go.fixDef.shape.m_type === 0 ? new b2CircleShape() : new b2PolygonShape();
-      go.bodyDef = mergeObjects(new b2BodyDef(), go.bodyDef);
-      go.bodyDef.userData = go;
-      go.fixDef = mergeObjects(fixDef, go.fixDef);
-      go.body = world.CreateBody(go.bodyDef);
-      go.body.CreateFixture(go.fixDef);
-      if (go.modelName) {
-        var md = modelData[go.modelName];
-        go.model = addModel(md.geometry, md.materials);
-      }
+      var go = fixDeserializedGameObject(input.gameObjects[i]);
+
       if (go.isPlayer) player = go;
       gameObjects.push(go);
     }
     addFloor();
+  }
+
+  function fixDeserializedGameObject(go) {
+    var fixDef = new b2FixtureDef();
+    fixDef.shape = go.fixDef.shape.m_type === 0 ? new b2CircleShape() : new b2PolygonShape();
+    go.bodyDef = mergeObjects(new b2BodyDef(), go.bodyDef);
+    go.bodyDef.userData = go;
+    go.fixDef = mergeObjects(fixDef, go.fixDef);
+    go.body = world.CreateBody(go.bodyDef);
+    go.body.CreateFixture(go.fixDef);
+    if (go.modelName) {
+      var md = modelData[go.modelName];
+      go.model = addModel(md.geometry, md.materials);
+    }
+    return go;
+  }
+
+  function deserializeGameObject(data) {
+    var go = JSON.parse(data);
+    return fixDeserializedGameObject(go);
   }
 
   function draw() {
