@@ -7,6 +7,7 @@
   var gameObjects = [];
   var testSerialization;
   var modelData = [];
+  
   // Physics Definitions
 
   var b2Vec2 = Box2D.Common.Math.b2Vec2;
@@ -21,11 +22,7 @@
   var b2Shape = Box2D.Collision.Shapes.b2Shape;
   var b2DebugDraw = Box2D.Dynamics.b2DebugDraw;
 
-  var world = new b2World(
-  new b2Vec2(0, 0), // Gravity
-  true // Allow objects to sleep
-  );
-
+  var world = new b2World(new b2Vec2(0, 0), true);
   var debugDraw = new b2DebugDraw();
 
   // Initialization
@@ -38,70 +35,43 @@
   $(window).resize(onWindowResize);
 
   function init() {
-    var physicsOffset = 100;
     initDebugDrawing();
     initCamera();
     onWindowResize();
+
     scene = new THREE.Scene();
     addFloor();
     addLight(new THREE.Vector3(10, 50, 130), new THREE.Color('#ffffff'));
-
-    var jsonLoader = new THREE.JSONLoader();
-    jsonLoader.load("res/models/android.js", function(geometry, materials) {
-      go = {};
-      go.rotOffset = Math.PI / 2;
-      go.modelName = "android";
-      modelData[go.modelName] = {
-        geometry: geometry,
-        materials: materials
-      };
-      go.model = addModel(geometry, materials);
-
-      go.bodyDef = new b2BodyDef();
-      go.fixDef = new b2FixtureDef();
-      go.fixDef.shape = new b2CircleShape();
-      go.fixDef.shape.SetRadius(2.5);
-      go.bodyDef.type = b2Body.b2_dynamicBody; // balls can move
-      go.bodyDef.userData = go;
-      go.bodyDef.position.x = 50 + physicsOffset;
-      go.bodyDef.position.y = 0 + physicsOffset;
-      go.body = world.CreateBody(go.bodyDef);
-      go.body.CreateFixture(go.fixDef); // Add this physics body to the world
-      go.body.SetFixedRotation(true);
-
-      go.isPlayer = true;
-      player = go;
-
-      gameObjects.push(go);
-    });
-
-    jsonLoader.load("res/models/fern/fern.js", function(geometry, materials) {
-      var fern = addModel(geometry, materials);
-    });
-
-    jsonLoader.load("res/models/interior.js", function(geometry, materials) {
-      var go = {};
-      go.modelName = "interior";
-      modelData[go.modelName] = {
-        geometry: geometry,
-        materials: materials
-      };
-      go.model = addModel(geometry, materials);
-      go.model.position.y = 1;
-      go.bodyDef = new b2BodyDef();
-      go.fixDef = new b2FixtureDef();
-      go.fixDef.shape = new b2PolygonShape();
-      go.fixDef.shape.SetAsBox(33, 43); // "25" = half width of the ramp, "1" = half height
-      go.bodyDef.type = b2Body.b2_staticBody; // Objects defined in this function are all static
-      go.bodyDef.userData = go;
-      go.bodyDef.position.x = 50 + physicsOffset;
-      go.bodyDef.position.y = 50 + physicsOffset;
-      go.body = world.CreateBody(go.bodyDef);
-      go.body.CreateFixture(go.fixDef); // Add this physics body to the world
-      gameObjects.push(go);
-    });
+    loadGameObject("android");
+    loadGameObject("interior");
 
     document.body.appendChild(renderer.domElement);
+  }
+
+  function loadGameObject(name) {
+    var path = "res/objects/" + name + ".js";
+    new $.getJSON(path, function(input) {
+      fixDeserializedGameObject(input);
+    });
+  }
+
+  function loadModel(modelName, callback) {
+    if (modelData[modelName]) {
+      if (callback) {
+        callback(modelData[modelName]);
+      }
+    } else {
+      var path = "res/models/" + modelName + "/" + modelName + ".js";
+      new THREE.JSONLoader().load(path, function(geometry, materials) {
+        modelData[modelName] = {
+          geometry: geometry,
+          materials: materials
+        };
+        if (callback) {
+          callback(modelData[modelName]);
+        }
+      });
+    }
   }
 
   function initDebugDrawing() {
@@ -310,9 +280,6 @@
     }
     for (i = 0; i < input.gameObjects.length; i++) {
       var go = fixDeserializedGameObject(input.gameObjects[i]);
-
-      if (go.isPlayer) player = go;
-      gameObjects.push(go);
     }
     addFloor();
   }
@@ -326,9 +293,12 @@
     go.body = world.CreateBody(go.bodyDef);
     go.body.CreateFixture(go.fixDef);
     if (go.modelName) {
-      var md = modelData[go.modelName];
-      go.model = addModel(md.geometry, md.materials);
+      loadModel(go.modelName, function(md) {
+        go.model = addModel(md.geometry, md.materials);
+      });
     }
+    if (go.isPlayer) player = go;
+    gameObjects.push(go);
     return go;
   }
 
