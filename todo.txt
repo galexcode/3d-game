@@ -1,3 +1,5 @@
+Serialization
+  - Integrate lights as game object
 Level editing
   - Property editor
   - Object selection/placement

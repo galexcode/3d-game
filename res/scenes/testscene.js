@@ -1,14 +1,4 @@
 {
-	"lights": [
-		{
-			"position": {
-				"x": 10,
-				"y": 50,
-				"z": 130
-			},
-			"color": {}
-		}
-	],
 	"prototypes": [
 		{
 			"parent": "android",
@@ -21,6 +11,12 @@
 		},
 		{
 			"parent": "interior"
+		},
+		{
+			"parent": "point_light"
+		},
+		{
+			"parent": "floor"
 		}
 	]
 }

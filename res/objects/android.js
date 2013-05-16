@@ -1,8 +1,15 @@
 {
+	"transform": {
+		"position": {
+			"x": 200,
+			"y": 0,
+			"z": 150
+		}
+	},
 	"bodyDef": {
 		"position": {
-			"x": 194.8096440627117,
-			"y": 154.8800697746799
+			"x": 0,
+			"y": 0
 		},
 		"linearVelocity": {
 			"x": 0,

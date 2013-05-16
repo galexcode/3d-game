@@ -41,10 +41,9 @@
     onWindowResize();
 
     // scene = new THREE.Scene();
-    // addFloor();
-    // addLight(new THREE.Vector3(10, 50, 130), new THREE.Color('#ffffff'));
     // loadGameObject("android");
     // loadGameObject("interior");    
+    //addLight(new THREE.Vector3(10, 50, 130), new THREE.Color('#ffffff'));
     loadScene("testScene");
 
     document.body.appendChild(renderer.domElement);
@@ -211,9 +210,10 @@
 
       if (go && go.model) {
         position = object.GetPosition();
-        go.model.position.x = position.x;
-        go.model.position.z = position.y;
+        go.transform.position.x = go.model.position.x = position.x;
+        go.transform.position.z = go.model.position.z = position.y;
         go.model.rotation.y = 2 * Math.PI - object.GetAngle() + (go.rotOffset ? go.rotOffset : 0);
+
       }
       object = object.GetNext();
     }
@@ -230,13 +230,6 @@
     output.lights = [];
     output.prototypes = [];
     var i;
-    for (i = 0; i < scene.__lights.length; i++) {
-      var light = scene.__lights[i];
-      output.lights[i] = {
-        position: light.position,
-        color: light.color
-      };
-    }
     for (i = 0; i < gameObjects.length; i++) {
       var go = gameObjects[i];
       var p = go.parent;
@@ -272,20 +265,25 @@
   }
 
   function serializePrepGameObject(go) {
-    go.bodyDef.userData = undefined;
-    if (go.body) go.bodyDef.position = go.body.GetPosition();
+    if (go.bodyDef) {
+      go.bodyDef.userData = undefined;
+    }
     return {
       parent: go.parent,
+      transform: go.transform,
       bodyDef: go.bodyDef,
       fixDef: go.fixDef,
       modelName: go.modelName,
+      light: go.light,
       isPlayer: go.isPlayer,
       rotOffset: go.rotOffset
     };
   }
 
   function serializeFixGameObject(go) {
-    go.bodyDef.userData = go;
+    if (go.bodyDef) {
+      go.bodyDef.userData = go;
+    }
   }
 
   function deserializeScene(data) {
@@ -293,15 +291,10 @@
     clearWorld();
     gameObjects = [];
     var input = typeof(data) == 'object' ? data : JSON.parse(data);
-    var i;
-    for (i = 0; i < input.lights.length; i++) {
-      addLight(input.lights[i].position, input.lights[i].color);
-    }
-    for (i = 0; i < input.prototypes.length; i++) {
+    for (var i = 0; i < input.prototypes.length; i++) {
       var proto = input.prototypes[i];
       var go = loadGameObject(proto.parent, proto);
     }
-    addFloor();
   }
 
   function loadScene(name) {
@@ -309,17 +302,29 @@
   }
 
   function fixDeserializedGameObject(go) {
-    var fixDef = new b2FixtureDef();
-    fixDef.shape = go.fixDef.shape.m_type === 0 ? new b2CircleShape() : new b2PolygonShape();
-    go.bodyDef = mergeObjects(new b2BodyDef(), go.bodyDef);
-    go.bodyDef.userData = go;
-    go.fixDef = mergeObjects(fixDef, go.fixDef);
-    go.body = world.CreateBody(go.bodyDef);
-    go.body.CreateFixture(go.fixDef);
+    if (!go.transform) {
+      go.transform = {
+        position: new THREE.Vector3()
+      };
+    }
+    if (go.bodyDef) {
+      go.bodyDef.userData = go;
+      go.body = world.CreateBody(go.bodyDef);
+      go.body.SetPosition(new b2Vec2(go.transform.position.x, go.transform.position.z));
+      if (go.fixDef) {
+        var fixDef = new b2FixtureDef();
+        fixDef.shape = go.fixDef.shape.m_type === 0 ? new b2CircleShape() : new b2PolygonShape();
+        go.fixDef = mergeObjects(fixDef, go.fixDef);
+        go.body.CreateFixture(go.fixDef);
+      }
+    }
     if (go.modelName) {
       loadModel(go.modelName, function(md) {
         go.model = addModel(md.geometry, md.materials);
       });
+    }
+    if (go.light) {
+      addLight(go.transform.position, go.light.color);
     }
     if (go.isPlayer) player = go;
     gameObjects.push(go);
@@ -359,22 +364,6 @@
     // add to the scene
     scene.add(pointLight);
     return pointLight;
-  }
-
-  function addFloor() {
-    var floorTexture = new THREE.ImageUtils.loadTexture('res/images/grass.png');
-    floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
-    floorTexture.repeat.set(400, 400);
-    // DoubleSide: render texture on both sides of mesh
-    var floorMaterial = new THREE.MeshPhongMaterial({
-      map: floorTexture,
-      side: THREE.DoubleSide
-    });
-    var floorGeometry = new THREE.PlaneGeometry(5000, 5000, 1, 1);
-    var floor = new THREE.Mesh(floorGeometry, floorMaterial);
-    floor.position.y = 0;
-    floor.rotation.x = Math.PI / 2;
-    scene.add(floor);
   }
 
   function addModel(geometry, materials) {
