@@ -342,18 +342,6 @@
     }
   }
 
-  function addCube() {
-    var geometry = new THREE.CubeGeometry(200, 200, 200);
-    var material = new THREE.MeshBasicMaterial({
-      color: 0xff0000,
-      wireframe: true
-    });
-
-    var cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
-    return mesh;
-  }
-
   function addLight(position, color) {
     // create a point light
     var pointLight = new THREE.PointLight(color);
