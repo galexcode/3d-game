@@ -65,7 +65,7 @@
 			],
 			[
 				"for",
-				"for	for (…) {…}"
+				"for	for ( {"
 			]
 		]
 	},
@@ -168,7 +168,7 @@
 			],
 			[
 				"2p",
-				"Preferences: 2pdf Settings – Default"
+				"Preferences: 2pdf Settings Default"
 			],
 			[
 				"viewi",
@@ -276,11 +276,11 @@
 			],
 			[
 				"Package Control",
-				"Preferences: Package Control Settings – Default"
+				"Preferences: Package Control Settings Default"
 			],
 			[
 				"package",
-				"Preferences: Package Control Settings – User"
+				"Preferences: Package Control Settings User"
 			],
 			[
 				"javasc",

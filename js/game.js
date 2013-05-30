@@ -44,9 +44,27 @@
     // loadGameObject("android");
     // loadGameObject("interior");    
     //addLight(new THREE.Vector3(10, 50, 130), new THREE.Color('#ffffff'));
-    loadScene("testScene");
+    loadScene("testScene", function() {
+      loadGrid();
+    });
 
     document.body.appendChild(renderer.domElement);
+  }
+
+  function loadGrid() {
+    var height = 0.1;
+    var geometry = new THREE.Geometry();
+    for (var x = -1000; x < 1000; x += 10) {
+      geometry.vertices.push(new THREE.Vector3(x, height, -1000));
+      geometry.vertices.push(new THREE.Vector3(x, height, 1000));
+    }
+    for (var z = -1000; z < 1000; z += 10) {
+      geometry.vertices.push(new THREE.Vector3(-1000, height, z));
+      geometry.vertices.push(new THREE.Vector3(1000, height, z));
+    }
+    var material = new THREE.LineBasicMaterial();
+    var grid = new THREE.Line(geometry, material, THREE.LinePieces);
+    scene.add(grid);
   }
 
   function loadGameObject(name, derived) {
@@ -297,8 +315,12 @@
     }
   }
 
-  function loadScene(name) {
-    $.getJSON("res/scenes/" + name + ".js", deserializeScene);
+  function loadScene(name, callback) {
+    $.getJSON("res/scenes/" + name + ".js", function(data) {
+      deserializeScene(data);
+      if (callback !== undefined)
+        callback();
+    });
   }
 
   function fixDeserializedGameObject(go) {
