@@ -8,6 +8,7 @@
   var testSerialization;
   var modelData = [];
   var prototypes = {};
+  var cells;
 
   // Physics Definitions
 
@@ -38,6 +39,7 @@
   function init() {
     initDebugDrawing();
     initCamera();
+    initCells();
     onWindowResize();
 
     // scene = new THREE.Scene();
@@ -151,6 +153,11 @@
     if (input.isKeyTriggered(VK_P)) {
       saveScene();
     }
+    if (input.isKeyTriggered(VK_E)) {
+      interact();
+    } else if (input.isKeyReleased(VK_E)) {
+      player.grabbedObject = undefined;
+    }
     if (input.isKeyTriggered(VK_I)) {
       if (testSerialization) deserializeScene(testSerialization);
     }
@@ -165,6 +172,15 @@
     }
     if (input.isKeyTriggered(VK_0)) {
       testSerialization = saveGameObject(player);
+    }
+    if (input.isKeyTriggered(VK_LEFT)) {
+      rotateObject(player.grabbedObject, -Math.PI / 2);
+    } else if (input.isKeyTriggered(VK_RIGHT)) {
+      rotateObject(player.grabbedObject, Math.PI / 2);
+    } else if (input.isKeyTriggered(VK_UP)) {
+      pushObject(player.grabbedObject, 1);
+    } else if (input.isKeyTriggered(VK_DOWN)) {
+      pushObject(player.grabbedObject, -1);
     }
   }
 
@@ -237,6 +253,13 @@
     }
     world.DrawDebugData();
     world.ClearForces();
+  }
+
+  function interact() {
+    var cell = getFacingCell();
+    if (cell.objects.length > 0) {
+      player.grabbedObject = cell.objects[0];
+    }
   }
 
   function saveScene() {
@@ -350,6 +373,7 @@
     }
     if (go.isPlayer) player = go;
     gameObjects.push(go);
+    posToCell(go.transform.position.x, go.transform.position.z).objects.push(go);
     return go;
   }
 
@@ -426,4 +450,86 @@
 
   function copyObject(obj) {
     return jQuery.extend(true, {}, obj);
+  }
+
+  function Cell() {
+    this.objects = [];
+  }
+
+  function initCells() {
+    cells = new Array(100);
+    for (var i = 0; i < 100; i++) {
+      cells[i] = new Array(100);
+    }
+    for (var x = 0; x < cells.length; x++) {
+      for (var y = 0; y < cells.length; y++) {
+        cells[x][y] = new Cell();
+        cells[x][y].x = x;
+        cells[x][y].y = y;
+      }
+    }
+  }
+
+  function posToCell(posX, posY) {
+    var cellX = Math.floor(posX / 10);
+    var cellY = Math.floor(posY / 10);
+    return cells[cellX][cellY];
+  }
+
+  function getObjectCell(go) {
+    return posToCell(go.transform.position.x, go.transform.position.z);
+  }
+
+  function getFacingCell() {
+    var x = player.transform.position.x;
+    var y = player.transform.position.z;
+    var a = player.body.GetAngle();
+    x += Math.cos(a) * 10;
+    y += Math.sin(a) * 10;
+    return posToCell(x, y);
+  }
+
+  function rotateObject(go, angle) {
+    if (!go) return;
+    go.body.SetAngle(go.body.GetAngle() + angle);
+  }
+
+  function pushObject(go, cellOffset) {
+    if (!go) return;
+    var playerCell = getObjectCell(player);
+    var goCell = getObjectCell(go);
+    var dx = (goCell.x - playerCell.x) * cellOffset;
+    var dy = (goCell.y - playerCell.y) * cellOffset;
+    pushObjectHelper(go, goCell, dx, dy);
+    pushObjectHelper(player, playerCell, dx, dy);
+  }
+
+  function pushObjectHelper(go, goCell, dx, dy) {
+    var cellX = goCell.x + dx;
+    var cellY = goCell.y + dy;
+    var pos = cellToPos(cellX, cellY);
+    go.body.SetPosition(new b2Vec2(pos.x, pos.y));
+    var newCell = cells[cellX][cellY];
+    changeObjectCell(go, newCell, goCell);
+  }
+
+  function cellToPos(cellX, cellY) {
+    return {
+      x: cellX * 10 + 5,
+      y: cellY * 10 + 5
+    };
+  }
+
+  function changeObjectCell(go, dest, src) {
+    removeFromArray(go, src.objects);
+    dest.objects.push(go);
+  }
+
+  function removeFromArray(o, arr) {
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i] === o) {
+        arr.splice(i, 1);
+        return;
+      }
+    }
   }

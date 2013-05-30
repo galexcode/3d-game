@@ -17,6 +17,9 @@
 		},
 		{
 			"parent": "floor"
+		},
+		{
+			"parent": "chair"
 		}
 	]
 }
