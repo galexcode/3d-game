@@ -137,16 +137,19 @@
     requestAnimationFrame(gameLoop);
     update();
     draw();
-    input.update();
   }
 
   function update() {
     updateInput();
+    TWEEN.update();
     if (player) {
       updatePlayer();
-      updateCamera();
     }
     updatePhysics();
+    input.update();
+    if (player) {
+      updateCamera();
+    }
   }
 
   function updateInput() {
@@ -173,18 +176,22 @@
     if (input.isKeyTriggered(VK_0)) {
       testSerialization = saveGameObject(player);
     }
-    if (input.isKeyTriggered(VK_LEFT)) {
-      rotateObject(player.grabbedObject, -Math.PI / 2);
-    } else if (input.isKeyTriggered(VK_RIGHT)) {
-      rotateObject(player.grabbedObject, Math.PI / 2);
-    } else if (input.isKeyTriggered(VK_UP)) {
-      pushObject(player.grabbedObject, 1);
-    } else if (input.isKeyTriggered(VK_DOWN)) {
-      pushObject(player.grabbedObject, -1);
+    if (player && !player.busy) {
+      if (input.isKeyDown(VK_LEFT)) {
+        rotateObject(player.grabbedObject, -Math.PI / 2);
+      } else if (input.isKeyDown(VK_RIGHT)) {
+        rotateObject(player.grabbedObject, Math.PI / 2);
+      } else if (input.isKeyDown(VK_UP)) {
+        pushObject(player.grabbedObject, 1);
+      } else if (input.isKeyDown(VK_DOWN)) {
+        pushObject(player.grabbedObject, -1);
+      }
     }
   }
 
   function updatePlayer() {
+    if (player.busy || player.grabbedObject)
+      return;
     var speed = 50;
     var left = input.isKeyDown(VK_A);
     var right = input.isKeyDown(VK_D);
@@ -257,7 +264,7 @@
 
   function interact() {
     var cell = getFacingCell();
-    if (cell.objects.length > 0) {
+    if (cell.objects.length > 0 && cell.objects[0] != player) {
       player.grabbedObject = cell.objects[0];
     }
   }
@@ -484,14 +491,24 @@
     var x = player.transform.position.x;
     var y = player.transform.position.z;
     var a = player.body.GetAngle();
-    x += Math.cos(a) * 10;
-    y += Math.sin(a) * 10;
+    x += Math.cos(a) * 5.5;
+    y += Math.sin(a) * 5.5;
     return posToCell(x, y);
   }
 
   function rotateObject(go, angle) {
     if (!go) return;
-    go.body.SetAngle(go.body.GetAngle() + angle);
+    var newAngle = go.body.GetAngle() + angle;
+    player.busy = true;
+    var tween = new TWEEN.Tween({
+      angle: go.body.GetAngle()
+    }).to({
+      angle: newAngle
+    }, 200).onUpdate(function() {
+      go.body.SetAngle(this.angle);
+    }).onComplete(function() {
+      player.busy = false;
+    }).start();
   }
 
   function pushObject(go, cellOffset) {
@@ -507,10 +524,16 @@
   function pushObjectHelper(go, goCell, dx, dy) {
     var cellX = goCell.x + dx;
     var cellY = goCell.y + dy;
-    var pos = cellToPos(cellX, cellY);
-    go.body.SetPosition(new b2Vec2(pos.x, pos.y));
+    var newPos = cellToPos(cellX, cellY);
     var newCell = cells[cellX][cellY];
     changeObjectCell(go, newCell, goCell);
+    player.busy = true;
+    var tween = new TWEEN.Tween(go.body.GetPosition())
+      .to(newPos, 200).onUpdate(function() {
+      go.body.SetPosition(new b2Vec2(this.x, this.y));
+    }).onComplete(function() {
+      player.busy = false;
+    }).start();
   }
 
   function cellToPos(cellX, cellY) {
