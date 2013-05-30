@@ -39,7 +39,7 @@
 				"y": 0
 			},
 			"m_type": 0,
-			"m_radius": 2.5
+			"m_radius": 5
 		},
 		"userData": null,
 		"friction": 0.2,
