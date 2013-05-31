@@ -4,5 +4,56 @@ Level editing
   - Save/load buttons
 Pushing objects
   - grabbing animation
-  - push/pull incrementally
-  - rotate 90 degrees
+  - grid collision check
+  - rotate arbitrarily sized objects
+Sound
+Items
+  - drop/pickup
+  - inventory
+  - use
+HUD
+  - name
+  - date/time
+  - city name
+  - minimap
+  - money
+  - message box
+Inside house
+  - scene switching
+  - teleporter
+Map generation
+  - rivers
+  - trees
+  - houses
+Environment
+  - weather
+  - time of day
+Planting
+  - tree growth
+  - fruit
+  - chopping
+  - digging holes
+  - seeds
+NPCS
+  - talking
+  - constrained wandering
+  - going home
+Quests
+  - fetch quest
+  - reward
+Progression
+  - tutorial
+  - paying debt
+  - upgrading house
+Fishing
+Beach combing
+Museum
+Farming
+
+
+
+
+
+
+
+
