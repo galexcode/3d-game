@@ -123,7 +123,9 @@
     camera.position.copy(cameraOffset);
     camera.lookAt(new THREE.Vector3(0, 0, 0));
     camera.locked = true;
-    renderer = new THREE.WebGLRenderer();
+    renderer = new THREE.WebGLRenderer({
+      antialias: true
+    });
   }
 
   function onWindowResize() {
