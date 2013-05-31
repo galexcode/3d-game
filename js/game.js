@@ -153,6 +153,7 @@
     if (player) {
       updateCamera();
     }
+    //updateDebug();
   }
 
   function updateInput() {
@@ -179,7 +180,7 @@
     if (input.isKeyTriggered(VK_0)) {
       testSerialization = saveGameObject(player);
     }
-    if (player && !player.busy) {
+    if (player && player.body.IsActive()) {
       if (input.isKeyDown(VK_LEFT)) {
         rotateObject(player.grabbedObject, -Math.PI / 2);
       } else if (input.isKeyDown(VK_RIGHT)) {
@@ -193,7 +194,7 @@
   }
 
   function updatePlayer() {
-    if (player.busy || player.grabbedObject)
+    if (!player.body.IsActive() || player.grabbedObject)
       return;
     var speed = 50;
     var left = input.isKeyDown(VK_A);
@@ -263,6 +264,17 @@
     }
     world.DrawDebugData();
     world.ClearForces();
+  }
+
+  function updateDebug() {
+    var c = document.getElementById("c");
+    var ctx = c.getContext("2d");
+    ctx.font = "8px Arial";
+    for (var x = 0; x < cells.length; x++) {
+      for (var y = 0; y < cells[0].length; y++) {
+        ctx.fillText(x + ',' + y, x * 20, y * 20 + 13);
+      }
+    }
   }
 
   function interact() {
@@ -502,7 +514,7 @@
   function rotateObject(go, angle) {
     if (!go) return;
     var newAngle = go.body.GetAngle() + angle;
-    player.busy = true;
+    player.body.SetActive(false);
     var tween = new TWEEN.Tween({
       angle: go.body.GetAngle()
     }).to({
@@ -510,7 +522,7 @@
     }, 200).onUpdate(function() {
       go.body.SetAngle(this.angle);
     }).onComplete(function() {
-      player.busy = false;
+      player.body.SetActive(true);
     }).start();
   }
 
@@ -520,23 +532,39 @@
     var goCell = getObjectCell(go);
     var dx = (goCell.x - playerCell.x) * cellOffset;
     var dy = (goCell.y - playerCell.y) * cellOffset;
-    pushObjectHelper(go, goCell, dx, dy);
-    pushObjectHelper(player, playerCell, dx, dy);
+    var collTestCell = cellOffset === 1 ? goCell : playerCell;
+    if (canPushObject(collTestCell, dx, dy)) {
+      pushObjectHelper(go, goCell, dx, dy);
+      pushObjectHelper(player, playerCell, dx, dy);
+    }
+
+    function pushObjectHelper(go, goCell, dx, dy) {
+      var cellX = goCell.x + dx;
+      var cellY = goCell.y + dy;
+      var newPos = cellToPos(cellX, cellY);
+      var newCell = cells[cellX][cellY];
+      if (go !== player)
+        changeObjectCell(go, newCell, goCell);
+      player.body.SetActive(false);
+      var tween = new TWEEN.Tween(go.body.GetPosition())
+        .to(newPos, 200).onUpdate(function() {
+        go.body.SetPosition(new b2Vec2(this.x, this.y));
+      }).onComplete(function() {
+        player.body.SetActive(true);
+      }).start();
+    }
   }
 
-  function pushObjectHelper(go, goCell, dx, dy) {
-    var cellX = goCell.x + dx;
-    var cellY = goCell.y + dy;
-    var newPos = cellToPos(cellX, cellY);
-    var newCell = cells[cellX][cellY];
-    changeObjectCell(go, newCell, goCell);
-    player.busy = true;
-    var tween = new TWEEN.Tween(go.body.GetPosition())
-      .to(newPos, 200).onUpdate(function() {
-      go.body.SetPosition(new b2Vec2(this.x, this.y));
-    }).onComplete(function() {
-      player.busy = false;
-    }).start();
+  function canPushObject(cell, dx, dy) {
+    var cellX = cell.x + dx;
+    var cellY = cell.y + dy;
+    if (cells[cellX]) {
+      var newCell = cells[cellX][cellY];
+      if (newCell && newCell.objects.length === 0) {
+        return true;
+      }
+    }
+    return false;
   }
 
   function cellToPos(cellX, cellY) {
