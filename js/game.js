@@ -51,6 +51,7 @@
     });
 
     document.body.appendChild(renderer.domElement);
+    //$("#dialog").dialog();
   }
 
   function loadGrid() {

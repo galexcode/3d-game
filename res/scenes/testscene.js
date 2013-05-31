@@ -20,6 +20,9 @@
 		},
 		{
 			"parent": "chair"
+		},
+		{
+			"parent": "seung"
 		}
 	]
 }
