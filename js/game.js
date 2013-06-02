@@ -9,6 +9,8 @@
   var modelData = [];
   var prototypes = {};
   var cells;
+  var time = 0;
+  var sunlight;
 
   // Physics Definitions
 
@@ -46,7 +48,10 @@
     // loadGameObject("android");
     // loadGameObject("interior");    
     //addLight(new THREE.Vector3(10, 50, 130), new THREE.Color('#ffffff'));
+
     loadScene("testScene", function() {
+      sunlight = new THREE.AmbientLight(0x202020);
+      scene.add(sunlight);
       loadGrid();
     });
 
@@ -153,6 +158,7 @@
     if (player) {
       updateCamera();
     }
+    updateHUD();
     //updateDebug();
   }
 
@@ -264,6 +270,12 @@
     }
     world.DrawDebugData();
     world.ClearForces();
+  }
+
+  function updateHUD() {
+    time = (time + 50) % 86400;
+    $("#hud").text(time.toTime());
+    updateSkyColor(time);
   }
 
   function updateDebug() {
@@ -586,4 +598,77 @@
         return;
       }
     }
+  }
+
+  Number.prototype.toTime = function() {
+    var seconds = this % 86400;
+    var hours = Math.floor(seconds / 3600);
+    var minutes = Math.floor((seconds - (hours * 3600)) / 60);
+    var isPM = false;
+
+    if (minutes < 10) {
+      minutes = "0" + minutes;
+    }
+    if (hours > 11) {
+      isPM = true;
+    }
+    if (hours > 12) {
+      hours -= 12;
+    } else if (hours === 0) {
+      hours = 12;
+    }
+    var time = hours + ':' + minutes + ' ' + (isPM ? 'PM' : 'AM');
+    return time;
+  };
+
+  var skyGradient = [{
+      t: 0,
+      r: 0.3,
+      g: 0.3,
+      b: 0.4
+    }, {
+      t: 21600,
+      r: 0.2,
+      g: 0.3,
+      b: 0.3
+    }, {
+      t: 43200,
+      r: 0.4,
+      g: 0.4,
+      b: 0.4
+    }, {
+      t: 60000,
+      r: 0.3,
+      g: 0.2,
+      b: 0.2
+    }, {
+      t: 86400,
+      r: 0.3,
+      g: 0.3,
+      b: 0.4
+    }
+  ];
+
+  function updateSkyColor(time) {
+    if (!sunlight)
+      return;
+    var c;
+    for (var i = skyGradient.length - 2; i >= 0; i--) {
+      if (time >= skyGradient[i].t) {
+        var c0 = skyGradient[i];
+        var c1 = skyGradient[i + 1];
+        var t = (time - c0.t) / (c1.t - c0.t);
+        c0 = colorFromRGB(c0.r, c0.g, c0.b);
+        c1 = colorFromRGB(c1.r, c1.g, c1.b);
+        var lerped = c0.lerp(c1, t);
+        sunlight.color = lerped;
+        return;
+      }
+    }
+  }
+
+  function colorFromRGB(r, g, b) {
+    var color = new THREE.Color();
+    color.setRGB(r, g, b);
+    return color;
   }

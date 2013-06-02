@@ -23,6 +23,7 @@
 "transparency"  : 1.0,
 "specularCoef"  : 10.0,
 "mapDiffuse"    : "grass.png",
+"mapDiffuseRepeat": [50,50],
 "vertexColors" : false,
 "shading": "phong"
 }

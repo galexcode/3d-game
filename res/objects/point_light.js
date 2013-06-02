@@ -7,6 +7,6 @@
 		}
 	},
 	"light": {
-		"color": "#ffffff"
+		"color": "#444444"
 	}
 }
